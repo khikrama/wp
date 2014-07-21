@@ -21,7 +21,6 @@ function shortcode_testimonial($atts){
     );
     $query = new WP_Query( $options );
 
-   // while ( $query->have_posts() ) : $query->the_post();
 
 		 
 
@@ -31,18 +30,15 @@ function shortcode_testimonial($atts){
             $output .= '</div>';
 
             $output .= '<div class="testimonial-right">';
-                $output .= '<div class="testimonial-thumbnail">'.$client_image .'</div>';
+                $output .= '<div class="testimonial-thumbnail"><img src="'.$client_image .'"></div>';
                 $output .= '<div class="testimonial-title">'.$client_name.'</div>';
                 $output .= '<div class="testimonial-country">'.$country .'</div>';
-                $output .= '<div class="testimonial-award">'.$award_image .'</div>';
+                $output .= '<div class="testimonial-thumbnail"><img src="'.$award_image .'"></div>';
             $output .= '</div>';
 
         $output .= '</div>';
     	
 
-   // endwhile;
-    
-//wp_reset_postdata();
 
     return $output;
 
