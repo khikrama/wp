@@ -23,7 +23,7 @@ function shortcode_testimonial($atts){
     	$output .= '<div class="testimonial">';
             $output .= '<div class="testimonial-title"><a href="'.get_permalink().'">'.the_title("","",false).'</a></div>';
             
-    	    $output .= '<div class="testimonial-content">'.the_content().'</div>';
+    	    $output .= '<div class="testimonial-content">'.get_the_content() .'</div>';
     		
     	$output .= '</div>';
 
