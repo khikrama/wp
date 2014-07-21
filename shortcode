@@ -1,0 +1,61 @@
+<?php
+
+
+function shortcode_testimonial($atts){
+    extract(shortcode_atts(array(
+        'message'       => '',
+        'client_image'  => '',
+        'client_name'   => '',
+        'country'       => '',
+        'award_image'   => ''
+
+ 
+    ),$atts));
+
+	$options = array(
+        'message'       => $message,
+        'client_image'  => $client_image,
+        'client_name'   => $client_name,
+        'country'       => $country,
+        'award_image'   => $award_image,
+    );
+    $query = new WP_Query( $options );
+
+   // while ( $query->have_posts() ) : $query->the_post();
+
+		 
+
+        $output .= '<div class="testimonial">';
+        	$output .= '<div class="testimonial-left">';
+                $output .= '<div class="testimonial-content">'.$message .'</div>';
+            $output .= '</div>';
+
+            $output .= '<div class="testimonial-right">';
+                $output .= '<div class="testimonial-thumbnail">'.$client_image .'</div>';
+                $output .= '<div class="testimonial-title">'.$client_name.'</div>';
+                $output .= '<div class="testimonial-country">'.$country .'</div>';
+                $output .= '<div class="testimonial-award">'.$award_image .'</div>';
+            $output .= '</div>';
+
+        $output .= '</div>';
+    	
+
+   // endwhile;
+    
+//wp_reset_postdata();
+
+    return $output;
+
+
+ 
+   
+}
+add_shortcode("testimonial","shortcode_testimonial");
+
+
+
+
+
+
+
+?>
