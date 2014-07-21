@@ -33,7 +33,7 @@ function shortcode_testimonial($atts){
                 $output .= '<div class="testimonial-thumbnail"><img src="'.$client_image .'"></div>';
                 $output .= '<div class="testimonial-title">'.$client_name.'</div>';
                 $output .= '<div class="testimonial-country">'.$country .'</div>';
-                $output .= '<div class="testimonial-thumbnail"><img src="'.$award_image .'"></div>';
+                $output .= '<div class="testimonial-award"><img src="'.$award_image .'"></div>';
             $output .= '</div>';
 
         $output .= '</div>';
@@ -47,6 +47,9 @@ function shortcode_testimonial($atts){
    
 }
 add_shortcode("testimonial","shortcode_testimonial");
+
+
+
 
 
 
