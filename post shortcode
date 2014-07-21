@@ -1,0 +1,48 @@
+<?php
+
+
+function shortcode_testimonial($atts){
+    extract(shortcode_atts(array(
+        'type'=>'post',
+        'cat'=>'1',
+        "posts_per_page"=>'5'
+ 
+    ),$atts));
+
+	$options = array(
+        'type' => $type,
+        'posts_per_page' => $posts_per_page,
+        'cat' => $cat,
+    );
+    $query = new WP_Query( $options );
+
+    while ( $query->have_posts() ) : $query->the_post();
+
+		 
+
+    	$output .= '<div class="testimonial">';
+            $output .= '<div class="testimonial-title"><a href="'.get_permalink().'">'.the_title("","",false).'</a></div>';
+            
+    	    $output .= '<div class="testimonial-content">'.the_content().'</div>';
+    		
+    	$output .= '</div>';
+
+    endwhile;
+    
+wp_reset_postdata();
+
+    return $output;
+
+
+ 
+   
+}
+add_shortcode("testimonial","shortcode_testimonial");
+
+
+
+
+
+
+
+?>
