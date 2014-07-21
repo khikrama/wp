@@ -5,7 +5,9 @@ function shortcode_testimonial($atts){
     extract(shortcode_atts(array(
         'type'=>'post',
         'cat'=>'1',
-        "posts_per_page"=>'5'
+        'posts_per_page'=>'5',
+        //'country' => 'Dhaka, Bangladesh'
+
  
     ),$atts));
 
@@ -13,6 +15,7 @@ function shortcode_testimonial($atts){
         'type' => $type,
         'posts_per_page' => $posts_per_page,
         'cat' => $cat,
+        //'country' => $country,
     );
     $query = new WP_Query( $options );
 
@@ -20,12 +23,19 @@ function shortcode_testimonial($atts){
 
 		 
 
-    	$output .= '<div class="testimonial">';
-            $output .= '<div class="testimonial-title"><a href="'.get_permalink().'">'.the_title("","",false).'</a></div>';
-            
-    	    $output .= '<div class="testimonial-content">'.get_the_content() .'</div>';
-    		
-    	$output .= '</div>';
+        $output .= '<div class="testimonial">';
+        	$output .= '<div class="testimonial-left">';
+                $output .= '<div class="testimonial-content">'.get_the_content() .'</div>';
+            $output .= '</div>';
+
+            $output .= '<div class="testimonial-right">';
+                $output .= '<div class="testimonial-thumbnail">'.get_the_post_thumbnail() .'</div>';
+                $output .= '<div class="testimonial-title"><a href="'.get_permalink().'">'.get_the_title("","",false).'</a></div>';
+               // $output .= '<div class="testimonial-country">'.$country .'</div>';
+            $output .= '</div>';
+
+        $output .= '</div>';
+    	
 
     endwhile;
     
