@@ -52,6 +52,4 @@ add_shortcode("testimonial","shortcode_testimonial");
 
 
 
-
-
 ?>
