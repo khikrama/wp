@@ -1,0 +1,58 @@
+
+	function shortcode_recent_post($atts, $content = null){
+	    extract(shortcode_atts(array(
+	    	'type'=>'post',
+	    	'layout' => 'default',
+	    	'columns' => 1,
+	        'cat'=>'',
+	        'posts_per_page'=>'5'   
+
+	 
+	    ),$atts));
+
+		$options = array(
+			'post_type' => $type,
+			'layout' => $layout,
+			'columns' => $columns,
+	        'posts_per_page' => $posts_per_page,
+	        'cat' => $cat
+	        
+	    );
+	    $query = new WP_Query( $options );
+
+	    if($layout == 'default'):
+
+		    while ( $query->have_posts() ) : $query->the_post();
+				 
+
+		        $output .= '<div class="recent_post layout-default">';
+		        	$output .= '<div class="layout-default-left">';
+		                $output .= '<div class="layout-default-date-day">'.get_the_date('d') .'</div>';
+		                $output .= '<div class="layout-default-date-month">'.get_the_date('M') .'</div>';
+		            $output .= '</div>';
+
+		            $output .= '<div class="layout-default-right">';
+		                $output .= '<div class="layout-default-title"><a href="'.get_permalink().'">'.get_the_title("","",false).'</a></div>';
+		                //$output .= '<div class="layout-default-meta">'.get_the_date().'</div>';
+		                $output .= '<div class="layout-default-content">'.get_the_content() .'</div>';
+		                
+		               
+		            $output .= '</div>';
+
+		        $output .= '</div>';
+		    	
+
+		    endwhile;
+
+	    endif;
+	    
+	wp_reset_postdata();
+
+	    return $output;
+
+
+	 
+	   
+	}
+	add_shortcode("recent_post","shortcode_recent_post");
+
