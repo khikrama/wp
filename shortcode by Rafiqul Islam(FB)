@@ -1,0 +1,100 @@
+add_shortcode( 'portfolios', function( $atts, $content = null ){
+ $atts = shortcode_atts(
+  array(
+    'column' => '3',
+    'number' => -1,
+    'filter' => 'hide'
+    ), $atts);
+
+ extract($atts);
+
+$thumb_width = 270;
+
+switch($column) {
+  case '4':
+      $thumb_width = 270;
+      break;
+  case '3':
+      $thumb_width = 370;
+      break;
+  case '2':
+      $thumb_width = 570;
+      break;
+}
+
+$thumb_height = $thumb_width / 2;
+ $args = array(
+    'posts_per_page' => $number,
+    'post_type'      =>  'portfolios'
+  );
+$id = ($filter !== 'hide') ? ' id="containment-portfolio"' : '';
+$class = ($filter !== 'hide') ? ' portfolio' : '';
+ $portfolios = get_posts( $args );
+
+ ob_start(); ?>
+
+ <?php if(count($portfolios)>0) { ?>
+
+<?php if ($filter === 'show') { ?>
+<div class="row">
+  <ul id="portfolio-filter" class="span12">
+    <li><a class="currents" href="#" data-filter="all"><?php _e('All', CDRSTEXTDOMAIN); ?></a></li>
+    <?php
+    $terms = get_terms('technologies', array('hide_empty'=> true));
+    foreach ($terms as $term) {
+      ?>
+      <li><a href="#" data-filter="<?php echo $term->slug; ?>"><?php echo $term->name; ?></a></li>
+      <?php
+    }
+    ?>
+  </ul>
+</div>
+<?php } ?>
+<ul class="thumbnails<?php echo $class; ?>"<?php echo $id; ?>>
+    <?php foreach ($portfolios as $key => $value) { ?>
+    <?php
+    $terms = wp_get_post_terms( $value->ID, 'technologies' );
+    $new_terms = array();
+    foreach ($terms as $term) { $new_terms[] = $term->slug; }
+    $slugs = implode(' ', $new_terms);
+    ?>
+          <?php
+            if (has_post_thumbnail($value->ID))
+            {
+                $thumb = cdrs_thumb_resizer($value->ID, $thumb_width, $thumb_height, true);
+                $pretty_photo = wp_get_attachment_url( get_post_thumbnail_id($value->ID), 'full' );
+            } else {
+                $thumb = aq_resize(get_template_directory_uri() . '/assets/images/placeholder.jpg', $thumb_width, $thumb_height, true);
+                $pretty_photo = get_template_directory_uri() . '/assets/images/placeholder.jpg';
+            }
+
+          ?>
+    <li class="span<?php echo 12/$column; ?> item-block<?php if ($filter === 'show') echo ' ' . $slugs. ' all'; ?>">
+      <a href="<?php echo $pretty_photo; ?>" class="zoom" rel="prettyPhoto" title="Image Title"></a>
+     <a href="<?php echo get_permalink($value->ID); ?>" class="link"></a>
+<a class="thumbnail" href="<?php echo get_permalink($value->ID); ?>"><img src="<?php echo $thumb; ?>" /></a>
+<div class="desc">
+  <a href="<?php echo get_permalink($value->ID); ?>"><?php if (strlen($value->post_title) <= 35) { echo $value->post_title; } else { echo substr($value->post_title, 0, 32) . '...'; } ?></a>
+  <p>
+    <?php $cont = cdrs_get_words($value->post_content, 10);
+    $cont = (strlen($cont) > 50) ? $cont : cdrs_get_words($value->post_content, 14);
+     ?>
+    <em>
+      <?php echo $cont; ?>
+    </em>
+  </p>
+</div>
+</li>
+      <?php } ?>
+</ul>
+  <?php } else { ?>
+  <div class="alert alert-danger fade in">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <?php _e('No portfolio item found!', CDRSTEXTDOMAIN); ?>
+  </div>
+  <?php
+} ?>
+
+<?php return ob_get_clean();
+
+});
