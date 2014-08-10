@@ -1,0 +1,206 @@
+<?php	
+
+	function content_full_width_shortcode($atts, $content = null) {
+
+	    extract(shortcode_atts(
+	        array(
+	        'class' => '',
+	        'background_color' => '',
+	        'color' => '',
+	        'padding_top' => '',
+	        'padding_bottom' => '',
+	        'border_top' => '',
+	        'border_bottom' => ''
+	    ), $atts));
+
+	    $output = '<div class="full_width '.$class.'" style="background:'.$background_color.';color:'.$color.';padding-top:'.$padding_top.';padding-bottom:'.$padding_bottom.';border-top:'.$border_top.';border-bottom:'.$border_bottom.'">';
+	    $output .= '<div class="container">';
+	    $output .= do_shortcode($content);
+	    $output .= '<div class="clear"></div>';
+	    $output .= '</div>';
+	    $output .= '</div>';
+
+	    return $output;
+	}
+	add_shortcode('full_width', 'content_full_width_shortcode');
+
+
+
+/*
+
+	function shortcode_recent_post($atts){
+	    extract(shortcode_atts(array(
+	    	'layout' => 'default',
+	    	'columns' => 1,
+	        'type'=>'post',
+	        'cat'=>'1',
+	        'posts_per_page'=>'5'   
+
+	 
+	    ),$atts));
+
+		$options = array(
+			'layout' => $layout,
+			'columns' => $columns,
+	        'type' => $type,
+	        'posts_per_page' => $posts_per_page,
+	        'cat' => $cat
+	        
+	    );
+	    $query = new WP_Query( $options );
+
+	    while ( $query->have_posts() ) : $query->the_post();
+
+			 
+
+	        $output .= '<div class="recent_post">';
+	        	$output .= '<div class="testimonial-left">';
+	                $output .= '<div class="testimonial-content">'.get_the_content() .'</div>';
+	            $output .= '</div>';
+
+	            $output .= '<div class="testimonial-right">';
+	                $output .= '<div class="testimonial-thumbnail">'.get_the_post_thumbnail() .'</div>';
+	                $output .= '<div class="testimonial-title"><a href="'.get_permalink().'">'.get_the_title("","",false).'</a></div>';
+	               
+	            $output .= '</div>';
+
+	        $output .= '</div>';
+	    	
+
+	    endwhile;
+	    
+	wp_reset_postdata();
+
+	    return $output;
+
+
+	 
+	   
+	}
+	add_shortcode("recent_post","shortcode_recent_post");
+
+
+
+*/
+
+
+
+
+	function shortcode_recent_post($atts, $content = null){
+	    extract(shortcode_atts(array(
+	    	'type'=>'post',
+	    	'layout' => 'default',
+	    	'columns' => 1,
+	        'cat'=>'',
+	        'number_posts'=>'5'   
+
+	 
+	    ),$atts));
+
+		$options = array(
+			'post_type' => $type,
+			'layout' => $layout,
+			'columns' => $columns,
+	        'posts_per_page' => $number_posts,
+	        'cat' => $cat
+	        
+	    );
+	    $query = new WP_Query( $options );
+
+	    if($layout == 'default'):
+
+		    while ( $query->have_posts() ) : $query->the_post();
+				 
+
+		        $output .= '<div class="recent_post layout-default">';
+		        	$output .= '<div class="layout-default-left">';
+		                $output .= '<div class="layout-default-date-day">'.get_the_date('d') .'</div>';
+		                $output .= '<div class="layout-default-date-month">'.get_the_date('M') .'</div>';
+		            $output .= '</div>';
+
+		            $output .= '<div class="layout-default-right">';
+		                $output .= '<div class="layout-default-title"><a href="'.get_permalink().'">'.get_the_title("","",false).'</a></div>';
+		                $output .= '<div class="layout-default-content">'.get_the_content() .'</div>';
+		                
+		               
+		            $output .= '</div>';
+
+		        $output .= '</div>';
+		    	
+
+		    endwhile;
+
+	    //endif;
+
+		elseif($layout == 'thumbnails-on-side'):
+
+			/*
+           setup_postdata($post);
+			$attachment_url = wp_get_attachment_image_src( get_post_thumbnail_id($post_id), 'full' );
+			$url            = $attachment_url['0'];
+
+*/
+			
+
+		    while ( $query->have_posts() ) : $query->the_post();
+				 
+
+		        $output .= '<div class="recent_post layout-thumbnails-on-side">';
+		        	$output .= '<div class="layout-thumbnails-on-side-left">';
+		                $output .= '<div class="layout-thumbnails-on-side-date-day">'.get_the_post_thumbnail( get_the_ID(), array(280,130) ).'</div>';
+		            $output .= '</div>';
+
+		            $output .= '<div class="layout-thumbnails-on-side-right">';
+		                $output .= '<div class="layout-thumbnails-on-side-title"><a href="'.get_permalink().'">'.get_the_title("","",false).'</a></div>';
+		                $output .= '<div class="layout-thumbnails-on-side-content">'.get_the_date() .'</div>';
+		                $output .= '<div class="layout-thumbnails-on-side-content">'.get_the_content() .'</div>';
+		                
+		               
+		            $output .= '</div>';
+
+		        $output .= '</div>';
+		    	
+
+		    endwhile;
+
+	    elseif ($layout == 'date-on-side'):
+	    	while ( $query->have_posts() ) : $query->the_post();
+				 
+
+		        $output .= '<div class="recent_post layout-date-on-side">';
+		        	$output .= '<div class="layout-date-on-side-left">';
+		                $output .= '<div class="layout-date-on-side-date-day">'.get_the_date('d') .'</div>';
+		                $output .= '<div class="layout-date-on-side-date-month">'.get_the_date('M') .'</div>';
+		            $output .= '</div>';
+
+		            $output .= '<div class="layout-date-on-side-right">';
+		                $output .= '<div class="layout-date-on-side-title"><a href="'.get_permalink().'">'.get_the_title("","",false).'</a></div>';
+		                $output .= '<div class="layout-date-on-side-content">'.get_the_content() .'</div>';
+		                
+		               
+		            $output .= '</div>';
+
+		        $output .= '</div>';
+		    	
+
+		    endwhile;
+
+		    endif;
+	    
+	    
+	wp_reset_postdata();
+
+	    return $output;
+
+
+	 
+	   
+	}
+	add_shortcode("recent_post","shortcode_recent_post");
+
+
+
+
+
+
+?>
